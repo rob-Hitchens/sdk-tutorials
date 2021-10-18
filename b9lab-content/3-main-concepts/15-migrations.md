@@ -6,15 +6,15 @@ A Cosmos SDK application running on a Cosmos blockchain can be upgraded in an or
 
 Upgrading blockchains and blockchain applications is notoriously difficult and risky. Cosmos SDK solves for the common risks and challenges. What are those challenges and risks that Cosmos SDK solves?
 
-Generally, when a blockchain is upgraded it is vital that all nodes upgrade simultaneously and at the same block height. In a disorderly setting, this is difficult to actually achieve. If the nodes do not do so then the blockchain will "fork" into two blockchains with common history - one chain that observes the new rules and one chain that observes the old rules. It is generally not possible for the two chains to reach a common consensus or merge together in the future. 
+Generally, when a blockchain is upgraded, it is vital that all nodes upgrade simultaneously and at the same block height. This is difficult to actually achieve unless the blockchain itself enforces strict coordination. If the nodes do not upgrade simultaneously then the blockchain will "fork" into two blockchains with common history - one chain that observes the new rules and one chain that observes the old rules. It is generally not possible for the two chains to reach a common consensus or merge together in the future. 
 
 <HighlightBox type="info">
-Without software support for upgrades, upgrading a live chain is risky because all of the validators need to pause their state machines at exactly the same block height and apply the upgrade before resuming. If this is not done correctly, there can be state inconsistencies which are hard to recover from.
+Without software support for upgrades, upgrading a live chain is risky because a successful upgrade requires that a quorum of validators needs to pause their state machines at exactly the same block height and apply the upgrade before resuming. If this is not done correctly, there can be state inconsistencies which are hard to recover from.
 </HighlightBox>
 
 Smart contracts on EVM chains such as Ethereum are immutible software. By definition, they are difficult or impossible to change. Various strategies based on modularity can simulate the effects of upgrading the contracts but all known methods have inherent limitations. Chief among the limitations are the difficulties, impossibility or prohibitive cost of reorganizing data at rest. This places a significant limitation on the types of upgrades that are feasible. 
 
-A Cosmos SDK blockchain built for a specific application can be upgraded without forks and, if necessary, the existing data can be reorganized to prepare it for use by a new version of the application and blockchain. 
+A Cosmos SDK blockchain can be upgraded without forks and, if necessary, existing state data can be reorganized. 
 
 ## Process Overview
 
@@ -42,11 +42,11 @@ A "Handler" may be executed after the Sidecar process is finished and the binary
 
 ### StoreLoader
 
-A StoreLoader prepares the on-chain state for use by the new binary. This can include reorganizing existing data. The node does not resume normal operation until the StoreLoader has returned and the Handler has completed its work. 
+A StoreLoader prepares the on-chain state for use by the new binary. This can include reorganizing existing data. The node does not resume normal operation until the StoreLoader has returned and the Handler has completed its work. A Storeloader can be used to migrate the state data to new internal organization. 
 
 ### Proposal
 
-Governance uses Proposals that are voted on, adopted or rejected. An upgrade Proposal take the form of accepting or rejecting a Plan that is prepared and submitted through governance. Proposals can be withdrawn (prior to execution) with cancellation proposals. 
+Governance uses Proposals that are voted on, adopted or rejected. An upgrade Proposal takes the form of accepting or rejecting a Plan that is prepared and submitted through governance. Proposals can be withdrawn (prior to execution) with cancellation proposals. 
 
 ## Advantages
 
@@ -58,7 +58,7 @@ Coordinated upgrades attend to the challenging process of upgrading blockchain a
 
 ## Effect of Upgrades
 
-Blockchains are paused at the block height of an adopted Plan. This initiates the upgrade process. The upgrade process itself may include switching to a new binary that is relatively small to download and install, or it may include an extensive data reorganization process. In either case, the validator stops processing blocks until it completes the process. When the Handler is satisfied that the upgrade is complete, the validator resumes processing blocks. From a user perspective, this appears as a pause and resume with the new version. 
+Blockchains are paused at the block height of an adopted Plan. This initiates the upgrade process. The upgrade process itself may include switching to a new binary that is relatively small to download and install. If required, the developer can specific a data reorganization process to prepare the existing state for the new version of the binary. In either case, the validator stops processing blocks until it completes the process. When the Handler is satisfied that the upgrade is complete, as defined by the developer, the validator resumes processing blocks. From a user perspective, this appears as a pause and resume with the new version. 
 
 ## Application-Specific
 
