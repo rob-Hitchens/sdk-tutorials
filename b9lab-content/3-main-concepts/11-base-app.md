@@ -1,6 +1,6 @@
 # Base App
 
-BaseApp is a boilerplate implementation of a Cosmos SDK application. This abstraction implements functionalities that every Cosmos application needs starting with an implementation of the Tendermind Application Blockchain Interface (ABCI). 
+BaseApp is a boilerplate implementation of a Cosmos SDK application. This abstraction implements functionalities that every Cosmos application needs starting with an implementation of the Tendermint Application Blockchain Interface (ABCI). 
 
 Tendermint consensus is application agnostic. It establishes the canonical transaction list and sends confirmed transactions to Cosmos SDK applications for interpretation, and the reverse - receives transactions from Cosmos SDK applications and submits them to the validators for confirmation. 
 
@@ -29,7 +29,7 @@ type App struct {
 }
 ```
 
-Extending the application with BaseApp gives the former access to all of BaseApp's methods. Developers compose their custom application with the modules they want, while not having to concern themselves with the hard work of implementing the ABCI, the service routers and state management logic.
+Extending the application with BaseApp gives the application access to all of BaseApp's methods. Developers compose their custom application with the modules they want, while not having to concern themselves with the hard work of implementing the ABCI, the service routers and state management logic.
 
 ### Type Definition
 
@@ -41,10 +41,10 @@ Important parameters that are initialized during the bootstrapping of the applic
 
 * **CommitMultiStore**:  This is the main store of the application, which holds the canonical state that is committed at the end of each block. This store is not cached, meaning it is not used to update the application's volatile (un-committed) states. The CommitMultiStore is a multi-store, meaning a store of stores. Each module of the application uses one or multiple KVStores in the multi-store to persist their subset of the state.
 * **Database**: The database is used by the CommitMultiStore to handle data persistence.
-* **Msg Service Router**: The msgServiceRouter facilitates the routing of sdk.Msg requests to the appropriate module Msg service for processing. Here a sdk.Msg refers to the transaction component that needs to be processed by a service in order to update the application state, and not to the ABCI message which implements the interface between the application and the underlying consensus engine.
-**gRPC Query Router*: The grpcQueryRouter facilitates the routing of gRPC queries to the appropriate module that will process it. These queries are not ABCI messages themselves, but they are relayed to the relevant module's gRPC Query service.
+* **Msg Service Router**: The msgServiceRouter facilitates the routing of sdk.Msg requests to the appropriate module Msg service for processing. An sdk.Msg refers to the transaction component that needs to be processed by a service in order to update the application state. sdk.Msgs are not to be confused with ABCI messages which implement the interface between the application and the underlying consensus engine.
+* **gRPC Query Router*: The grpcQueryRouter facilitates the routing of gRPC queries to the appropriate module that will process it. These queries are not ABCI messages themselves, but they are relayed to the relevant module's gRPC Query service.
 * **TxDecoder**: It is used to decode raw transaction bytes relayed by the underlying Tendermint engine.
-* **ParamStore**: The parameter store used to get and set application consensus parameters.
+* **ParamStore**: The parameter store is used to get and set application consensus parameters.
 * **AnteHandler**: This handler is used to handle signature verification, fee payment, and other pre-message execution checks when a transaction is received. It's executed during CheckTx/RecheckTx and DeliverTx.
 * **InitChainer**, BeginBlocker and EndBlocker: These are the functions executed when the application receives the InitChain, BeginBlock and EndBlock ABCI messages from the underlying Tendermint engine.
 
@@ -64,8 +64,6 @@ Consensus parameters define the overall consensus state:
 * **appVersion**: Version of the application. It is set in the application's constructor function.
 
 ### Constructor
-
-Consider the following simple constructor:
 
 ```
 func NewBaseApp(
