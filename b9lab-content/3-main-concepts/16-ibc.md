@@ -8,6 +8,8 @@ Applications on one chain may have a need to communicate with applications on an
 
 While such bridges between blockchains can be built and do exist, they are generally constructed in an ad hoc manner. In contracts, IBC provides all Cosmos SDK applications with a common protocol and framework for implementing standardized inter-blockchain communication. 
 
+IBC is a blockchain-agnostic protocol. It requires certain properties of the underlying blockchains, but its use is not limited to only Cosmos SDK-based blockchains. There is an implementation of the protocol going on for the Substrate framework, for example.
+
 ## Requirements
 
 Applications that use IBC must meet the following requirements:
@@ -30,7 +32,7 @@ Modules do not require in-depth knowledge of the low-level details of clients, c
 ## Components
 
 <HighlightBox type=”info”>
-Components https://github.com/cosmos/cosmos-sdk/blob/master/docs/ibc/overview.md 
+Components https://github.com/cosmos/ibc-go/blob/main/docs/ibc/overview.md
 </HighlightBox>
 
 ### Clients
