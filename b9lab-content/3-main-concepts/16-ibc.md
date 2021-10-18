@@ -8,7 +8,7 @@ Applications on one chain may have a need to communicate with applications on an
 
 While such bridges between blockchains can be built and do exist, they are generally constructed in an ad hoc manner. In contracts, IBC provides all Cosmos SDK applications with a common protocol and framework for implementing standardized inter-blockchain communication. 
 
-## Requirements
+## Application Requirements
 
 Applications that use IBC must meet the following requirements:
 
@@ -37,7 +37,7 @@ Components https://github.com/cosmos/cosmos-sdk/blob/master/docs/ibc/overview.md
 
 IBC clients are light clients that are identified by a unique client ID. IBC clients track the consensus states of other blockchains and the proof specs of those blockchains that are required to properly verify proofs against the client's consensus state.
 
-A client can be associated with any number of connections to multiple chains
+A client can be associated with any number of connections to the counterparty chain.
 
 Supported IBC clients::
 
@@ -126,7 +126,7 @@ When the acknowledgement is received successfully on the original sender chain, 
 
 ## Types of chain
 
-IBC can use Tendermint chains to bridge with IBC but also non-Tendermint chains. Two types of non-Tendermint chains are supported:
+Chains using the Tendermint consensus algorithm can bridge using IBC, but also non-Tendermint chains can use IBC. Two types of non-Tendermint chains are supported:
 
 * **Fast-Finality chains**: Any fast-finality consensus algorithms can connect with Cosmos by adapting IBC
 * **Probabilistic**: Things get a bit more complicated for blockchains that do not have fast finality, like Proof-of-Work chains. In this case, IBC uses a special kind of proxy-chain called a Peg-Zone. 
